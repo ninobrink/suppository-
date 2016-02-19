@@ -1,0 +1,127 @@
+#include <stdio.h>
+#include <cs50.h>
+#include <string.h>
+#include <stdlib.h>
+#include <ctype.h>
+
+bool iscaps(int capstest);
+bool iscapswraparound(int wrapcode,int wrapchar);
+
+int main(int argc,string argv[])
+{
+    
+    
+ if(argc==2)
+ {
+    for(int x=0;x<strlen(argv[1]);x++)
+        {
+            char ckeytest[strlen(argv[1])];
+            int  ikeytest[strlen(argv[1])];
+            ckeytest[x] = argv[1][x];
+            ikeytest[x] = (int) ckeytest[x];
+            if(isalpha(ikeytest[x]))
+            {
+                
+            }
+            else
+            {
+                printf("Please provide an appropriate input.\n");
+                return 1;
+            }
+        }
+    string key = argv[1];
+    int keylen = strlen(key);
+    char ckey[keylen];
+    int ikey[keylen];
+    //printf("What would you like to encipher?:");
+    string text = GetString();
+    int stringlen = strlen(text);
+    char ctext[stringlen];
+    int itext[stringlen];
+    int encipheri[stringlen];
+    char encipherc[stringlen];
+    int codekey[keylen];
+    int nspace = 0;
+    for(int i=0;i < (stringlen);i++)
+    {
+        if(i<keylen)
+        {
+          ckey[(i-nspace)] = key[(i-nspace)];
+            ikey[i-nspace] = (int) key[i-nspace];  
+            if(iscaps(ikey[i-nspace]))
+        {
+            codekey[i-nspace] = ikey[i-nspace]-65;
+        }
+        else
+        {
+            codekey[i-nspace] = ikey[i-nspace]-97;
+        }
+        }
+        ctext[i] = text[i];
+        itext[i] = (int) text[i];
+        if(isalpha(itext[i]))
+        {
+           
+           
+           
+               if(iscapswraparound(codekey[i-nspace],itext[i]))
+               {
+                    encipheri[i] = itext[i] + (codekey[(i-nspace) %(keylen)])- 26; 
+                    encipherc[i] = (char) encipheri[i];
+                    printf("%c", encipherc[i]);
+               }
+               else
+               {
+                    encipheri[i] = itext[i] + (codekey[(i-nspace) %(keylen)]); 
+                    encipherc[i] = (char) encipheri[i];
+                    printf("%c", encipherc[i]);
+               }
+               
+               
+           
+         
+        }
+        else
+        {
+            
+            printf("%c", ctext[i]);
+            nspace ++;
+            //put in loop to not count non-alphanumeric characters
+        }
+        
+        
+        
+    }
+    printf("\n");
+    return 0;
+ }
+ else
+ printf("Please provide an appropriate input.\n");
+ return 1;
+}
+bool iscaps(int capstest)
+    {
+        if(capstest > 64 && capstest < 91)
+        return true;
+        else
+        return false;
+    }
+
+bool iscapswraparound(int wrapcode,int wrapchar) 
+        {
+           if(iscaps(wrapchar))
+           {
+            if(wrapcode + (wrapchar - 65)>25)
+            return true;
+            else
+            return false;
+           }
+           else
+           {
+            if(wrapcode + (wrapchar - 97)>25)
+            return true;                                     
+            else
+            return false;
+           }
+            
+        }
